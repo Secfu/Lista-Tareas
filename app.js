@@ -1,15 +1,17 @@
 // app.js
 const express = require("express");
-const bodyParser = require("body-parser"); // Importa el middleware bodyParser para manejar el cuerpo de las solicitudes
+const bodyParser = require("body-parser");
+const listViewRouter = require("./list-view-router");
 const listEditRouter = require("./list-edit-router");
 
 const app = express();
-const port = 8000;
+const port = 3000;
 
-app.use(bodyParser.json()); // Usa bodyParser para analizar el cuerpo de las solicitudes en formato JSON
+app.use(bodyParser.json());
 
-// Monta el router en una ruta específica
-app.use("/tasks", listEditRouter);
+// Monta los routers en rutas específicas
+app.use("/tasks/view", listViewRouter);
+app.use("/tasks/edit", listEditRouter);
 
 app.listen(port, () => {
   console.log(`La aplicación está escuchando en http://localhost:${port}`);
