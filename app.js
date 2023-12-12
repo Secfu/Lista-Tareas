@@ -7,7 +7,16 @@ const listEditRouter = require("./list-edit-router");
 const app = express();
 const port = 3000;
 
+// Middleware a nivel de aplicación para gestionar métodos HTTP no válidos
+const handleInvalidMethod = (req, res, next) => {
+  if (!["GET", "POST", "PUT", "DELETE"].includes(req.method)) {
+    return res.status(400).json({ error: "Método HTTP no válido." });
+  }
+  next();
+};
+
 app.use(bodyParser.json());
+app.use(handleInvalidMethod);
 
 // Monta los routers en rutas específicas
 app.use("/tasks/view", listViewRouter);
