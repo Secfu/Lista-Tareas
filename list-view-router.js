@@ -2,22 +2,32 @@
 const express = require("express");
 const router = express.Router();
 
-// Mock de datos de tareas (puedes reemplazar esto con una base de datos real)
-const tasks = [
-  { id: 1, description: "Hacer la compra", completed: true },
-  { id: 2, description: "Escribir código", completed: false },
-  // Agrega más tareas según sea necesario
-];
+// Middleware para gestionar parámetros incorrectos
+const handleInvalidParams = (req, res, next) => {
+  // Verifica los parámetros según tus requisitos específicos
+  // Este es solo un ejemplo simple y debería ajustarse según tus necesidades
+
+  if (
+    !req.query.filter ||
+    (req.query.filter !== "completas" && req.query.filter !== "incompletas")
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Parámetros de consulta incorrectos." });
+  }
+
+  next(); // Continuar al siguiente middleware
+};
 
 // Ruta para listar tareas completas
-router.get("/completas", (req, res) => {
-  const completedTasks = tasks.filter((task) => task.completed);
+router.get("/completas", handleInvalidParams, (req, res) => {
+  // Resto del código
   res.json(completedTasks);
 });
 
 // Ruta para listar tareas incompletas
-router.get("/incompletas", (req, res) => {
-  const incompleteTasks = tasks.filter((task) => !task.completed);
+router.get("/incompletas", handleInvalidParams, (req, res) => {
+  // Resto del código
   res.json(incompleteTasks);
 });
 
